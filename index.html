@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Marks Management</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            width: 450px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 8px;
+            width: 80%;
+        }
+
+        button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Marks Management System</h2>
+
+    <label>Student Name:</label><br>
+    <input type="text" id="name" placeholder="Enter student name"><br>
+
+    <label>Roll Number:</label><br>
+    <input type="text" id="roll" placeholder="Example: 123ABC"><br>
+
+    <h3>Enter Five Subject Marks</h3>
+
+    <input type="number" id="s1" placeholder="Subject 1 marks">
+    <input type="number" id="s2" placeholder="Subject 2 marks">
+    <input type="number" id="s3" placeholder="Subject 3 marks">
+    <input type="number" id="s4" placeholder="Subject 4 marks">
+    <input type="number" id="s5" placeholder="Subject 5 marks">
+
+    <br><br>
+
+    <button onclick="calculateMarks()">Submit</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+function calculateMarks() {
+
+    let name = document.getElementById("name").value.trim();
+    let roll = document.getElementById("roll").value.trim();
+
+    let marks = [
+        document.getElementById("s1").value,
+        document.getElementById("s2").value,
+        document.getElementById("s3").value,
+        document.getElementById("s4").value,
+        document.getElementById("s5").value
+    ];
+
+    let result = document.getElementById("result");
+
+    // Name validation
+    if (!/^[A-Za-z ]{3,}$/.test(name)) {
+        result.innerHTML =
+            "<p class='error'>Error: Name must contain at least 3 letters and cannot be an integer.</p>";
+        return;
+    }
+
+    // Roll number validation
+    if (!/^[0-9][A-Za-z0-9]*$/.test(roll)) {
+        result.innerHTML =
+            "<p class='error'>Error: Roll number must start with a number and can contain letters.</p>";
+        return;
+    }
+
+    let total = 0;
+    let present = 0;
+    let absent = 0;
+    let output = "";
+
+    for (let i = 0; i < 5; i++) {
+
+        // If-else condition for attendance
+        if (marks[i] === "") {
+
+            output += "Subject " + (i + 1) + ": Absent<br>";
+            absent++;
+
+        } else {
+
+            let mark = Number(marks[i]);
+
+            if (!Number.isInteger(mark) || mark < 0 || mark > 100) {
+                result.innerHTML =
+                    "<p class='error'>Error: Marks must be between 0 and 100.</p>";
+                return;
+            }
+
+            total += mark;
+            present++;
+
+            output += "Subject " + (i + 1) +
+                      ": " + mark + " - Present<br>";
+        }
+    }
+
+    // Display student details
+    result.innerHTML =
+        "<h3>Student Details</h3>" +
+        "Name: " + name + "<br>" +
+        "Roll Number: " + roll + "<br><br>" +
+        output +
+        "<br>Total Marks: " + total + " / " + (present * 100) +
+        "<br>Present Subjects: " + present +
+        "<br>Absent Subjects: " + absent;
+
+    // Overall attendance using if-else
+    if (absent > 0) {
+        result.innerHTML +=
+            "<br><br>Overall Status: Absent in some subjects";
+    } else {
+        result.innerHTML +=
+            "<br><br>Overall Status: Present in all subjects";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
